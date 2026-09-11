@@ -1,0 +1,21 @@
+# Checklist de entrega
+
+- [x] Código Flutter organizado en módulos.
+- [x] Arquitectura Layers First.
+- [x] Suma.
+- [x] Resta.
+- [x] Multiplicación.
+- [x] División.
+- [x] Cociente.
+- [x] Residuo.
+- [x] Potenciación.
+- [x] Radicación.
+- [x] Logaritmación.
+- [x] Par / Impar para ambos números.
+- [x] Validaciones matemáticas.
+- [x] Splash con fondo pixel-art y gato.
+- [x] Gato dentro de la calculadora.
+- [x] Diseño responsive para celular.
+- [x] Botones con estilo pixel/kawaii.
+- [x] README con explicación de arquitectura y guion del video.
+- [x] Archivo `main_base_profesor.dart` como referencia del punto de partida.
