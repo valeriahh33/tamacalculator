@@ -59,16 +59,16 @@ class CalculatorService {
   }
 
   CalculationResult parity(double a, double b) {
-    if (!_isInteger(a) || !_isInteger(b)) {
-      throw const FormatException('PAR/IMPAR requiere dos números enteros.');
-    }
-    final first = a.toInt();
-    final second = b.toInt();
-    return CalculationResult(
-      expression: 'PAR / IMPAR',
-      result: 'N1: ${_parity(first)}  |  N2: ${_parity(second)}',
-    );
+  if (!_isInteger(a) || !_isInteger(b)) {
+    throw const FormatException('PAR/IMPAR requiere dos números enteros.');
   }
+  final first = a.toInt();
+  final second = b.toInt();
+  return CalculationResult(
+    expression: 'PAR / IMPAR',
+    result: '$first: ${_parity(first)}  |  $second: ${_parity(second)}',
+  );
+}
 
   void _validateDivisor(double b) {
     if (b == 0) {

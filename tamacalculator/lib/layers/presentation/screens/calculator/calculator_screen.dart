@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../../../core/theme/app_theme.dart';
 import '../../controllers/calculator_controller.dart';
 import '../../widgets/cat_display.dart';
+import '../../widgets/pixel_border.dart';
 import '../../widgets/pixel_button.dart';
 
 class CalculatorScreen extends StatefulWidget {
@@ -33,21 +33,33 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 18),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 430),
-                  child: _CalculatorShell(controller: controller),
-                ),
-              ),
-            );
-          },
-        ),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Fondo de la app: la misma imagen del gatito
+          Image.asset(
+            'assets/images/fondo_gato.png',
+            fit: BoxFit.cover,
+          ),
+          // Capa oscura sutil para que resalte el marco
+          Container(color: const Color(0x33472A28)),
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 20),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 400),
+                      child: _CalculatorShell(controller: controller),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -60,26 +72,42 @@ class _CalculatorShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 9, 10, 14),
-      decoration: BoxDecoration(
-        color: AppColors.panel,
-        border: Border.all(color: AppColors.border, width: 3),
-        borderRadius: BorderRadius.circular(38),
-        boxShadow: const [BoxShadow(color: AppColors.border, blurRadius: 0, offset: Offset(0, 8))],
-      ),
-      child: Column(
-        children: [
-          const _Header(),
-          CatDisplay(
-            expression: controller.expression,
-            display: controller.display,
-            message: controller.message,
-            messageIsError: controller.messageIsError,
-          ),
-          const SizedBox(height: 8),
-          _Keypad(controller: controller),
-        ],
+    return PixelBorder(
+      color: AppColors.panel,
+      borderColor: AppColors.border,
+      borderWidth: 4,
+      pixelSize: 6,
+      shadowOffset: const Offset(0, 8),
+      shadowColor: AppColors.borderDark,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 14),
+        child: Column(
+          children: [
+            const _Header(),
+            const SizedBox(height: 10),
+            CatDisplay(
+              expression: controller.expression,
+              display: controller.display,
+              message: controller.message,
+              messageIsError: controller.messageIsError,
+              reaction: controller.reaction,
+            ),
+            const SizedBox(height: 10),
+            _Keypad(controller: controller),
+            const SizedBox(height: 6),
+            // Decoración inferior: huellitas
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.pets, color: AppColors.pink, size: 14),
+                SizedBox(width: 8),
+                Icon(Icons.pets, color: AppColors.pink, size: 14),
+                SizedBox(width: 8),
+                Icon(Icons.pets, color: AppColors.pink, size: 14),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -91,44 +119,26 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 55,
+      height: 45,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _HeaderIcon(icon: '×', fill: AppColors.screen),
-          const Spacer(),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Calculadora', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.text)),
-              Text('TAMA-CALC', style: TextStyle(fontSize: 22, height: 1, fontWeight: FontWeight.w900, letterSpacing: 1, color: AppColors.pink)),
-            ],
+          const Icon(Icons.pets, color: AppColors.pink, size: 26),
+          const SizedBox(width: 8),
+          const Text(
+            'TAMA-CALC',
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1,
+              color: AppColors.pink,
+              shadows: [Shadow(color: AppColors.borderDark, offset: Offset(2, 2))],
+            ),
           ),
-          const Spacer(),
-          _HeaderIcon(icon: '▤', fill: AppColors.yellow),
+          const SizedBox(width: 8),
+          const Icon(Icons.pets, color: AppColors.pink, size: 26),
         ],
       ),
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-  const _HeaderIcon({required this.icon, required this.fill});
-
-  final String icon;
-  final Color fill;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 27,
-      height: 27,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: fill.withOpacity(.45),
-        border: Border.all(color: AppColors.border, width: 2),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(icon, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: AppColors.text)),
     );
   }
 }
@@ -179,7 +189,7 @@ class _Keypad extends StatelessWidget {
           PixelButton(label: '.', backgroundColor: AppColors.purple, onPressed: controller.inputDecimal),
         ]),
         Row(children: [
-          PixelButton(label: '=', backgroundColor: AppColors.mint, fontSize: 30, flex: 4, onPressed: controller.equals),
+          PixelButton(label: '=', backgroundColor: AppColors.yellow, fontSize: 30, flex: 4, onPressed: controller.equals),
         ]),
       ],
     );
